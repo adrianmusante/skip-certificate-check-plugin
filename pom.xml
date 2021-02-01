@@ -3,14 +3,19 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.399</version><!-- which version of Jenkins is this plugin built against? -->
+    <version>4.15</version>
+    <relativePath />
   </parent>
 
-  <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>skip-certificate-check</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
 
+  <properties>
+    <revision>1.1</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <java.level>8</java.level>
+  </properties>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Skip+Certificate+Check+plugin</url>
 
   <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
@@ -33,4 +38,27 @@
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
   </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <copy file="${project.build.directory}/${project.artifactId}.hpi" tofile="${project.build.directory}/${project.artifactId}.jpi"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
